@@ -15,7 +15,7 @@ export default Ember.Component.extend({
   scrollable: null,
   untimelyLoading: 0,
 
-  didInsertElement() {
+  didRender() {
     this._super(...arguments);
     this._setupScrollable();
     this.set('guid', Ember.guidFor(this));
