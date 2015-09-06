@@ -48,10 +48,11 @@ module('Acceptance: Infinity Route - offset trigger', {
 
 test('it should start loading more items when the scroll is on the very bottom ' +
   'when triggerOffset is not set', assert => {
+  assert.expect(8);
   visit('/test-scrollable');
 
   andThen(() => {
-    var postList       = find('ul');
+    var postList = find('ul');
     var infinityLoader = find('.infinity-loader');
 
     assert.equal(postList.find('li').length, 25, "Two items should be in the list");
@@ -73,13 +74,15 @@ test('it should start loading more items when the scroll is on the very bottom '
       });
     });
   });
+});
 
 test('it should start loading more items before the scroll is on the very bottom ' +
   'when triggerOffset is set', assert => {
+  assert.expect(8);
   visit('/test-scrollable?triggerOffset=200');
 
   andThen(() => {
-    var postList       = find('ul');
+    var postList = find('ul');
     var infinityLoader = find('.infinity-loader');
 
     assert.equal(postList.find('li').length, 25, "Two items should be in the list");
@@ -101,5 +104,4 @@ test('it should start loading more items before the scroll is on the very bottom
       });
     });
   });
-
 });
