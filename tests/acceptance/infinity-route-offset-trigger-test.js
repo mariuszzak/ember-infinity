@@ -48,60 +48,72 @@ module('Acceptance: Infinity Route - offset trigger', {
 
 test('it should start loading more items when the scroll is on the very bottom ' +
   'when triggerOffset is not set', assert => {
-  assert.expect(8);
   visit('/test-scrollable');
-
+  var postList, infinityLoader, triggerOffset;
   andThen(() => {
-    var postList = find('ul');
-    var infinityLoader = find('.infinity-loader');
+    postList = find('ul');
+    infinityLoader = find('.infinity-loader');
+    triggerOffset = postList.get(0).scrollHeight - postList.height();
 
     assert.equal(postList.find('li').length, 25, "Two items should be in the list");
     assert.equal(infinityLoader.hasClass('reached-infinity'), false, "Infinity should not yet have been reached");
-    var triggerOffset = postList.get(0).scrollHeight - postList.height();
-    postList.scrollTop(triggerOffset - 20);
-    triggerEvent('ul', 'scroll');
-    andThen(() => {
-      assert.equal(postList.scrollTop(), triggerOffset - 20, "Window should be scrolled");
-      assert.equal(postList.find('li').length, 25, "25 items should be in the list");
-      assert.equal(find('span').text(), 'loading');
-      postList.scrollTop(triggerOffset + 20);
-      triggerEvent('ul', 'scroll');
 
-      andThen(() => {
-        assert.equal(postList.scrollTop(), triggerOffset + 20, "Window should be scrolled");
-        assert.equal(postList.find('li').length, 50, "50 items should be in the list");
-        assert.equal(infinityLoader.hasClass('reached-infinity'), true, "Infinity should have been reached");
-      });
-    });
+    postList.scrollTop(triggerOffset - 100);
+  });
+  triggerEvent('ul', 'scroll');
+  andThen(() => {
+    postList = find('ul');
+    infinityLoader = find('.infinity-loader');
+    triggerOffset = postList.get(0).scrollHeight - postList.height();
+
+    assert.equal(postList.find('li').length, 25, "25 items should be in the list");
+    assert.equal(find('span').text(), 'loading');
+
+    postList.scrollTop(triggerOffset + 100);
+  });
+  triggerEvent('ul', 'scroll');
+  andThen(() => {
+    postList = find('ul');
+    infinityLoader = find('.infinity-loader');
+    triggerOffset = postList.get(0).scrollHeight - postList.height();
+
+    assert.equal(postList.find('li').length, 50, "50 items should be in the list");
+    assert.equal(infinityLoader.hasClass('reached-infinity'), true, "Infinity should have been reached");
   });
 });
 
 test('it should start loading more items before the scroll is on the very bottom ' +
   'when triggerOffset is set', assert => {
-  assert.expect(8);
   visit('/test-scrollable?triggerOffset=200');
 
+  var postList, infinityLoader, triggerOffset;
+
   andThen(() => {
-    var postList = find('ul');
-    var infinityLoader = find('.infinity-loader');
+    infinityLoader = find('.infinity-loader');
+    postList = find('ul');
+    triggerOffset = postList.get(0).scrollHeight - postList.height() - 200;
 
     assert.equal(postList.find('li').length, 25, "Two items should be in the list");
     assert.equal(infinityLoader.hasClass('reached-infinity'), false, "Infinity should not yet have been reached");
-    var triggerOffset = postList.get(0).scrollHeight - postList.height() - 200;
-    postList.scrollTop(triggerOffset - 20);
-    triggerEvent('ul', 'scroll');
-    andThen(() => {
-      assert.equal(postList.scrollTop(), triggerOffset - 20, "Window should be scrolled");
-      assert.equal(postList.find('li').length, 25, "25 items should be in the list");
-      assert.equal(find('span').text(), 'loading');
-      postList.scrollTop(triggerOffset + 20);
-      triggerEvent('ul', 'scroll');
 
-      andThen(() => {
-        assert.equal(postList.scrollTop(), triggerOffset + 20, "Window should be scrolled");
-        assert.equal(postList.find('li').length, 50, "50 items should be in the list");
-        assert.equal(infinityLoader.hasClass('reached-infinity'), true, "Infinity should have been reached");
-      });
-    });
+    postList.scrollTop(triggerOffset - 100);
+  });
+  triggerEvent('ul', 'scroll');
+  andThen(() => {
+    postList = find('ul');
+    triggerOffset = postList.get(0).scrollHeight - postList.height() - 200;
+
+    assert.equal(postList.find('li').length, 25, "25 items should be in the list");
+    assert.equal(find('span').text(), 'loading');
+
+    postList.scrollTop(triggerOffset + 100);
+  });
+  triggerEvent('ul', 'scroll');
+  andThen(() => {
+    postList = find('ul');
+    infinityLoader = find('.infinity-loader');
+
+    assert.equal(postList.find('li').length, 50, "50 items should be in the list");
+    assert.equal(infinityLoader.hasClass('reached-infinity'), true, "Infinity should have been reached");
   });
 });

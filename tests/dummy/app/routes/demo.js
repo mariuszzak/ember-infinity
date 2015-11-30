@@ -2,6 +2,7 @@ import Ember from 'ember';
 import InfinityRoute from 'ember-infinity/mixins/route';
 import Pretender from 'pretender';
 import faker from 'faker';
+import json from '../helpers/json';
 
 
 function generateFakeData(qty) {
@@ -28,7 +29,7 @@ export default Ember.Route.extend(InfinityRoute, {
           total_pages: Math.ceil(fd.length/per)
         }
       };
-      return [200, {}, JSON.stringify(payload)];
+      return json(200, payload);
 
     }, 500 /*ms*/);
   },

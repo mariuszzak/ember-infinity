@@ -40,14 +40,12 @@ const InfinityLoaderComponent = Ember.Component.extend({
   },
 
   _selfOffset() {
-    var selfOffset;
     if(this.get('_customScrollableIsDefined')) {
-      selfOffset = this.$().position().top + this.get("_scrollable").scrollTop();
+      return this.$().position().top + this.get("_scrollable").scrollTop();
     }
     else {
-      selfOffset = this.$().offset().top;
+      return this.$().offset().top;
     }
-    return selfOffset;
   },
 
   _bottomOfScrollableOffset() {
